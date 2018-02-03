@@ -119,11 +119,12 @@ class Service {
     "bookmark": "<alternative to skip>"
     }
      */
-    find(params = {}) {
-        params.limit = params.limit || this.paginate.default
+    find(parameters = {}) {
+        let params = _mapQueryParams(parameters);
+        params.limit = params.limit || this.paginate.default;
 
         const selector = params => {
-            return this._selector(removeInvalidParams(_mapQueryParams(params)))
+            return this._selector(removeInvalidParams(params))
                 .then(res => ({
                     limit: params.limit,
                     bookmark: res.bookmark,
