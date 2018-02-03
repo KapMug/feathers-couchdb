@@ -21,6 +21,8 @@ const _mapQueryParams = params => {
     let mappedParams = Object.assign({}, params);
     if (mappedParams.query) {
         mappedParams.selector = mappedParams.query;
+    } else {
+        return mappedParams;
     }
     if (mappedParams.selector.$limit) {
         mappedParams.limit = mappedParams.selector.$limit;
