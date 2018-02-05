@@ -1,6 +1,6 @@
 {
   "name": "@kapmug/feathers-nano",
-  "version": "3.0.0",
+  "version": "1.0.0",
   "description": "A couchdb service for feathers",
   "main": "lib/",
   "scripts": {
@@ -8,6 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "rimraf lib/ && babel -d lib/ src/",
     "build": "npm run compile",
+    "prepublish": "npm run build",
     "start": "node test/index.js"
   },
   "repository": {

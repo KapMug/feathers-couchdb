@@ -2,7 +2,7 @@ import Promise from 'bluebird'
 import Proto from 'uberproto'
 import errors from '@feathersjs/errors'
 import errorHandler from './error-handler'
-import {mergeDeep, filterByKeys} from './util'
+import { mergeDeep, filterByKeys, renameKeys, removeKeys } from './util'
 
 const removeInvalidParams = params => {
   const allowedParams = [
@@ -18,25 +18,22 @@ const removeInvalidParams = params => {
 }
 
 const _mapQueryParams = params => {
-  let mappedParams = Object.assign({}, params);
-  if (mappedParams.query) {
-    mappedParams.selector = mappedParams.query;
-  } else {
-    return mappedParams;
+  const map = params => {
+    const keysMap = {
+      $limit: 'limit',
+      $skip: 'skip',
+      $sort: 'sort',
+      $select: 'fields',
+    }
+    const standardKeys = Object.keys(keysMap)
+
+    return {
+      ...renameKeys(keysMap, filterByKeys(standardKeys, params.query)),
+      selector: removeKeys(standardKeys, params.query),
+    }
   }
-  if (mappedParams.selector.$limit) {
-    mappedParams.limit = mappedParams.selector.$limit;
-  }
-  if (mappedParams.selector.$skip) {
-    mappedParams.skip = mappedParams.selector.$skip;
-  }
-  if (mappedParams.selector.$sort) {
-    mappedParams.sort = mappedParams.selector.$sort;
-  }
-  if (mappedParams.selector.$select) {
-    mappedParams.fields = mappedParams.selector.$select;
-  }
-  return mappedParams;
+
+  return params.query ? map(params) : params
 }
 
 class Service {
