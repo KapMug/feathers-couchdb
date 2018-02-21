@@ -71,3 +71,10 @@ export function renameKeys(keysMap, obj) {
   })
   return Object.assign({}, ...keyValues)
 }
+
+/**
+ * Compose implementation
+ * @param {object} fns - Array of functions
+ * @returns {function} - Result of compose
+ */
+export const compose = (f, ...fs) => fs.length ? (...args) => f(compose(...fs)(...args)) : f

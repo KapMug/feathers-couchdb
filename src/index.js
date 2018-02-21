@@ -2,7 +2,7 @@ import Promise from 'bluebird'
 import Proto from 'uberproto'
 import errors from '@feathersjs/errors'
 import errorHandler from './error-handler'
-import { mergeDeep, filterByKeys, renameKeys, removeKeys } from './util'
+import { mergeDeep, filterByKeys, renameKeys, removeKeys, compose } from './util'
 
 const removeInvalidParams = params => {
   const allowedParams = [
@@ -117,10 +117,10 @@ class Service {
     }
    */
   find(parameters = {}) {
-    const params = {
-      ..._mapQueryParams(parameters),
-      limit: params.limit !== undefined ? params.limit : this.paginate.default,
-    }
+    const params = compose(
+      params => ({...params, limit: params.limit !== undefined ? params.limit : this.paginate.default}),
+      _mapQueryParams,
+    )(parameters)
 
     const selector = params => {
       return this._selector(removeInvalidParams(params))
