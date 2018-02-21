@@ -117,8 +117,10 @@ class Service {
     }
    */
   find(parameters = {}) {
-    let params = _mapQueryParams(parameters);
-    params.limit = params.limit || this.paginate.default;
+    const params = {
+      ..._mapQueryParams(parameters),
+      limit: params.limit !== undefined ? params.limit : this.paginate.default,
+    }
 
     const selector = params => {
       return this._selector(removeInvalidParams(params))
