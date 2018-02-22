@@ -85,7 +85,7 @@ class Service {
   }
 
   _get(id, params) {
-    return this.db.then(db => db.getAsync(id, params))
+    return this.db.then(db => db.getAsync(id, params).catch(() => undefined))
   }
 
   _insert(doc, params) {
